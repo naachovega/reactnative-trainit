@@ -2,6 +2,7 @@ import { useEffect, useContext, useState } from "react"
 import { SafeAreaView, View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native"
 import CardClass from "../../../Components/ClassCard"
 import GoBack from "../../../Components/GoBack"
+import { primary } from "../../../Constants/colors"
 import AuthContext from '../../../Context/index'
 
 export default function UserClasses({ route, navigation }) {
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-SemiBold',
         width: '95%',
         alignSelf: 'center',
-        color: '#050A30',
+        color: primary,
     },
     nullText: {
         fontFamily: 'Poppins-SemiBold',

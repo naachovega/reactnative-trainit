@@ -1,8 +1,9 @@
-import { View, Text, TouchableOpacity, TextInput, SafeAreaView, StyleSheet, Alert, Image } from 'react-native'
+import { View, Text, TextInput, SafeAreaView, StyleSheet, Alert } from 'react-native'
 import { useEffect, useState, useContext } from 'react'
-import { Ionicons } from '@expo/vector-icons'
 import SendChanges from '../../../Components/SendChanges'
 import AuthContext from '../../../Context/index'
+import host from '../../../config'
+import { actionButtonText, backgroundColor, inputBackground, placeholderTextColor, primary, secondary } from '../../../Constants/colors'
 
 
 export default function EditBio({ navigation }) {
@@ -26,9 +27,8 @@ export default function EditBio({ navigation }) {
     }, [bio])
 
     const sendChanges = () => {
-
         const biography = {
-            socialMediaId: user.socialMediaId,
+            _id: user._id,
             biography: bio
         }
 
@@ -38,13 +38,13 @@ export default function EditBio({ navigation }) {
             body: JSON.stringify(biography)
         };
 
-        fetch(`http:/192.168.0.87:3000/api/user/edit-bio`, requestOptions)
-            .then(res => res.ok ? res.json() : null)
+        fetch(`${host}/api/user/edit-bio`, requestOptions)
+            .then(res => res.json())
             .then(data => {
                 if (data) {
                     setUser(data)
                     setTimeout(() => {
-                        Alert.alert('Exito', 'You can see your new biogrpahy on your profile', []       )
+                        Alert.alert('Exito', 'You can see your new biogrpahy on your profile', [])
                     }, 300)
                     navigation.goBack()
                 }
@@ -63,7 +63,7 @@ export default function EditBio({ navigation }) {
                 <Text style={styles.label}>Edit your bio:</Text>
                 <Text style={styles.description}>Provide a biography for your profile so other users can get to know you better</Text>
                 <TextInput
-                    placeholderTextColor={"#000C66cc"}
+                    placeholderTextColor={primary}
                     value={bio}
                     onChangeText={setBio}
                     style={styles.input}
@@ -75,7 +75,7 @@ export default function EditBio({ navigation }) {
                 />
                 <View style={styles.viewChars}>
                     <Text style={{
-                        color: bio.length >= maxChars - (maxChars * 0.10) ? 'red' : 'black',
+                        color: bio.length >= maxChars - (maxChars * 0.10) ? 'red' : primary,
                         fontFamily: 'Poppins-SemiBold',
                     }}>{bio.length}/{maxChars}</Text>
                 </View>
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     root: {
         height: '100%',
         width: '100%',
-        backgroundColor: '#6495ED',
+        backgroundColor: backgroundColor
     },
     description: {
         opacity: 0.5,
@@ -103,21 +103,22 @@ const styles = StyleSheet.create({
         marginTop: '3%',
         height: 50,
         borderRadius: 10,
-        borderWidth: 1,
-        padding: '2%',
+        borderWidth: 0.5,
+        paddingLeft: '5%',
+        height: 55,
+        paddingRight: '5%',
         fontSize: 18,
-        borderColor: '#000C66',
-        color: '#050A30',
-        backgroundColor: "#ebecf566",
+        borderColor: primary,
+        color: primary,
+        backgroundColor: inputBackground,
         fontFamily: 'Poppins-Regular',
         width: '95%',
     },
     label: {
-        fontSize: 28,
+        fontSize: 32,
         marginLeft: '3%',
-        fontWeight: '500',
-        color: '#050A30',
-        fontFamily: 'Poppins-SemiBold',
+        color: primary,
+        fontFamily: 'Poppins-Bold',
     },
     viewChars: {
         flexDirection: 'row',
@@ -129,7 +130,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginLeft: '3%',
         fontWeight: '500',
-        color: '#050A30',
+        color: primary,
         fontFamily: 'Poppins-SemiBold',
         alignSelf: 'center'
     }

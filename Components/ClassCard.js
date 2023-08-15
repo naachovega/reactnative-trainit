@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native'
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
-
+import {placeholderTextColor, primary} from '../Constants/colors'
 
 export default function CardClass({ uniqueClass }) {
 
@@ -29,7 +29,7 @@ export default function CardClass({ uniqueClass }) {
                 <Text style={styles.text}>{uniqueClass.title}</Text>
                 <Text style={styles.text}>{uniqueClass.date.date}</Text>
                 <Text style={{
-                    color: lugarDisponible ? '#000C66cc' : 'red',
+                    color: lugarDisponible ? placeholderTextColor : 'red',
                     fontFamily: 'Poppins-SemiBold',
                     padding: '2%',
                     fontSize: 23,
@@ -58,7 +58,7 @@ export default function CardClass({ uniqueClass }) {
             >
                 <Marker
                     coordinate={uniqueClass.location}
-                    pinColor="#050A30"
+                    pinColor={primary}
 
                 />
             </MapView>
@@ -67,7 +67,7 @@ export default function CardClass({ uniqueClass }) {
 }
 const styles = StyleSheet.create({
     text: {
-        color: '#000C66cc',
+        color: placeholderTextColor,
         fontFamily: 'Poppins-SemiBold',
         padding: '2%',
         fontSize: 23,

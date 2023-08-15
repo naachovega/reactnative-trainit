@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity, Text, StyleSheet, Image, View } from 'react-native'
+import { placeholderTextColor } from '../Constants/colors';
 
 export default function UserCard({ athlete, setShowModal, setShow }) {
 
@@ -9,7 +10,7 @@ export default function UserCard({ athlete, setShowModal, setShow }) {
     return (
         <TouchableOpacity
             style={{
-                backgroundColor: '#000C66cc',
+                backgroundColor: placeholderTextColor,
                 margin: 10,
                 padding: 15,
                 borderRadius: 20,

@@ -4,6 +4,7 @@ import CardClass from '../../../Components/ClassCard'
 import AuthContext from '../../../Context/index'
 import { Ionicons } from '@expo/vector-icons'
 import ErrorPopUp from '../../../Components/ErrorPopUp'
+import { backgroundColor, primary } from '../../../Constants/colors'
 
 export default function Class({ navigation }) {
 
@@ -88,7 +89,7 @@ export default function Class({ navigation }) {
                     position: 'absolute',
                     right: '2.5%',
                     bottom: '3%',
-                    backgroundColor: '#050A30',
+                    backgroundColor: primary,
                     borderRadius: 50,
                     padding: 20
                 }}
@@ -108,14 +109,14 @@ const styles = StyleSheet.create({
     root: {
         height: '100%',
         width: '100%',
-        backgroundColor: '#6495ED'
+        backgroundColor: backgroundColor
     },
     title: {
         fontSize: 40,
         fontFamily: 'Poppins-SemiBold',
         width: '95%',
         alignSelf: 'center',
-        color: '#050A30',
+        color: primary,
     },
     nullText: {
         fontFamily: 'Poppins-SemiBold',

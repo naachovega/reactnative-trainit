@@ -1,17 +1,31 @@
-import { View, Text, StyleSheet, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Keyboard, TouchableOpacity, ScrollView } from 'react-native'
 import { useState } from 'react'
-import { useEffect } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Picker } from '@react-native-picker/picker';
 import { useContext } from 'react';
 import AuthContext from '../../Context/index'
+import host from '../../config';
+import { actionButtonText, backgroundColor, inputBackground, placeholderTextColor, primary, secondary } from '../../Constants/colors';
 
 export default function Register() {
-
     const { user, setUser } = useContext(AuthContext)
+    const [interestsArray, setInterestsArray] = useState([])
+    const [bkpArray, setBkpArray] = useState([])
+    const [initialInterests, setInitialInterests] = useState([])
 
-    const interestsArray = ["Futbol", "Pilates", "Funcional", "Tenis", "Deportes", "Calistenia", "ESCUCHEN", "CORRAN LA BOLA", "JUEGAN EN", "FRANCIA PERO", "SON TODOS", "DE ANGOLA"]
+    const sendBday = () => {
+        setsendDoB(true)
+        fetch(`${host}/api/interests`)
+            .then(res => res.ok ? res.json() : null)
+            .then(data => {
+                if (data) {
+                    setInitialInterests(data)
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
 
     const [interests, setInterests] = useState([])
 
@@ -40,7 +54,6 @@ export default function Register() {
         // throw Error("")
         const registration = {
             _id: user._id,
-            role: role,
             name: name,
             lastName: lastName,
             birthdate: doB,
@@ -52,7 +65,7 @@ export default function Register() {
             body: JSON.stringify(registration)
         };
 
-        fetch(`http://192.168.0.87:3000/api/athlete/finalize-registration/`, requestOptions)
+        fetch(`${host}/api/athlete/finalize-registration/`, requestOptions)
             .then(res =>
                 res.ok ? res.json() : null)
             .then(data => {
@@ -68,60 +81,59 @@ export default function Register() {
 
     }
     return (
-        <View style={styles.root}>
+        <View style={styles.root} onStartShouldSetResponder={() => Keyboard.dismiss()}>
             <Text style={styles.title}>TRAIN IT</Text>
-            {!sendrole ?
+            {!sendName ?
                 <>
-                    <Text style={styles.label}>What type of user will you be?</Text>
-                    <Picker
-                        style={{ marginLeft: 10, marginRight: 10 }}
-                        selectedValue={role}
-                        onValueChange={(itemValue, itemIndex) => {
-                            setrole(itemValue)
-                        }}
+                    <Text style={styles.label}>First Name: </Text>
+                    <TextInput
+                        placeholderTextColor={primary}
+                        value={name}
+                        onChangeText={setName}
+                        style={styles.input}
+                        placeholder={"Your name here"}
+                        keyboardType={'default'}
                     >
-                        <Picker.Item label='Athlete' value='Athlete' />
-                        <Picker.Item label='Coach' value='Coach' />
-                    </Picker>
+                    </TextInput>
 
+                    <Text style={styles.label}>Last Name: </Text>
+                    <TextInput
+                        placeholderTextColor={primary}
+                        value={lastName}
+                        onChangeText={setlastName}
+                        style={styles.input}
+                        placeholder={"Your last name here"}
+                        keyboardType={'default'}
+                    >
+                    </TextInput>
                     <View style={{ justifyContent: 'flex-end' }}>
                         <TouchableOpacity style={{
                             alignSelf: 'flex-end',
                             marginRight: 25,
                         }}
                             onPress={() => {
-                                setsendrole(true)
+                                setSendName(true)
+                                setSendlastName(true)
                             }}
-                        >
-                            <Ionicons name='ios-arrow-forward-sharp' color={"#000C66cc"} size={28} />
+                            disabled={!name || !lastName ? true : false} >
+                            <Ionicons name='ios-arrow-forward-sharp' color={primary} size={28} />
                         </TouchableOpacity>
                     </View>
                 </>
                 :
-                !sendName ?
+
+                !sendDoB
+                    ?
                     <>
-                        <Text style={styles.label}>First Name: </Text>
-                        <TextInput
-                            placeholderTextColor={"#000C66cc"}
-                            value={name}
-                            onChangeText={setName}
-                            style={styles.input}
-                            placeholder={"Your name here"}
-                            keyboardType={'default'}
-                        >
-                        </TextInput>
-
-                        <Text style={styles.label}>Last Name: </Text>
-                        <TextInput
-                            placeholderTextColor={"#000C66cc"}
-                            value={lastName}
-                            onChangeText={setlastName}
-                            style={styles.input}
-                            placeholder={"Your last name here"}
-                            keyboardType={'default'}
-                        >
-                        </TextInput>
-
+                        <Text style={styles.label}>Select your Birthdate:</Text>
+                        <DateTimePicker
+                            mode='date'
+                            display='spinner'
+                            style={{ marginTop: 20 }}
+                            // maximumDate={new Date(`${year}-${month}-${day}`)}
+                            value={doB}
+                            onChange={setChange}
+                        />
 
                         <View style={styles.arrows}>
                             <TouchableOpacity style={{
@@ -129,142 +141,102 @@ export default function Register() {
                                 marginLeft: 25
                             }}
                                 onPress={() => {
-                                    setsendrole(false)
+                                    setSendName(false)
+                                    setSendlastName(false)
                                 }} >
-                                <Ionicons name='ios-arrow-back-sharp' color={"#000C66cc"} size={28} />
+                                <Ionicons name='ios-arrow-back-sharp' color={primary} size={28} />
                             </TouchableOpacity>
 
                             <TouchableOpacity style={{
                                 alignSelf: 'flex-end',
                                 marginRight: 25,
                             }}
-                                onPress={() => {
-                                    setSendName(true)
-                                    setSendlastName(true)
-                                }}
-                                disabled={!name || !lastName ? true : false} >
-                                <Ionicons name='ios-arrow-forward-sharp' color={!name || !lastName ? "grey" : "#000C66cc"} size={28} />
+                                onPress={sendBday}
+                                disabled={!name ? true : false} >
+                                <Ionicons name='ios-arrow-forward-sharp' color={!name ? "grey" : primary} size={28} />
                             </TouchableOpacity>
-
                         </View>
                     </>
+
                     :
+                    !sendInterest
 
-                    !sendDoB
                         ?
+
+
                         <>
-                            <Text style={styles.label}>Select your Birthdate:</Text>
-                            <DateTimePicker
-                                mode='date'
-                                display='spinner'
-                                style={{ marginTop: 20 }}
-                                // maximumDate={new Date(`${year}-${month}-${day}`)}
-                                value={doB}
-                                onChange={setChange}
-                            />
+                            <Text style={styles.label}>Interests: <Text style={{ fontSize: 15, opacity: 0.6 }}>(optional)</Text></Text>
+                            <Text style={{ fontSize: 15, opacity: 0.6, alignSelf: 'center', marginTop: 12, color: primary }}>This will help you find classes that are more suitable to you</Text>
 
-                            <View style={styles.arrows}>
-                                <TouchableOpacity style={{
-                                    alignSelf: 'flex-start',
-                                    marginLeft: 25
-                                }}
-                                    onPress={() => {
-                                        setSendName(false)
-                                        setSendlastName(false)
-                                    }} >
-                                    <Ionicons name='ios-arrow-back-sharp' color={"#000C66cc"} size={28} />
-                                </TouchableOpacity>
-
-                                <TouchableOpacity style={{
-                                    alignSelf: 'flex-end',
-                                    marginRight: 25,
-                                }}
-                                    onPress={() => setsendDoB(true)}
-                                    disabled={!name ? true : false} >
-                                    <Ionicons name='ios-arrow-forward-sharp' color={!name ? "grey" : "#000C66cc"} size={28} />
-                                </TouchableOpacity>
-                            </View>
-                        </>
-
-                        :
-                        !sendInterest
-
-                            ?
-
-
-                            <>
-                                <Text style={styles.label}>Interests: <Text style={{ fontSize: 15, opacity: 0.6 }}>(optional)</Text></Text>
-                                <Text style={{ fontSize: 15, opacity: 0.6, alignSelf: 'center', marginTop: 12, color: '#050A30' }}>This will help you find classes that are more suitable to you</Text>
-
-                                {interests.length > 0
-                                    ?
-                                    <>
-                                        <View style={styles.interestView}>
-                                            {interests.map(value => {
-                                                return <TouchableOpacity
-                                                    style={
-                                                        {
-                                                            backgroundColor: "#ebecf5cc",
-                                                            padding: 7,
-                                                            borderColor: "#ebecf5cc",
-                                                            borderWidth: 0.5,
-                                                            marginHorizontal: 4.5,
-                                                            marginBottom: 12,
-                                                            borderRadius: 15,
-                                                            alignSelf: 'center',
-                                                            flexDirection: 'row',
-                                                            justifyContent: 'center',
-                                                        }
-                                                    }
-                                                    onPress={() => {
-                                                        const index = interests.indexOf(value)
-                                                        interests.includes(value) ? interests.splice(index, 1) : null
-                                                        setInterests([...interests])
-                                                    }}
-                                                    key={value}
-                                                >
-                                                    <Text style={{
-                                                        fontSize: 17,
-                                                        fontFamily: 'Poppins-SemiBold',
-                                                        color: '#000C66cc'
-                                                    }}>{value}</Text>
-                                                    <Ionicons style={{ paddingHorizontal: 2.5 }} name='close-sharp' color={'black'} size={19} />
-                                                </TouchableOpacity>
-                                            })}
-
-                                        </View>
-                                    </>
-                                    :
-                                    <Text style={styles.nullText}>
-                                        Select your preferences. You can add up to 5 interests
-                                    </Text>
-                                }
-
-                                <ScrollView>
-
-                                    <View style={{
-                                        flexWrap: 'wrap',
-                                        width: '95%',
-                                        alignSelf: 'center',
-                                        flexDirection: 'row',
-                                        justifyContent: 'left',
-                                        borderTopWidth: 1,
-                                        borderTopColor: "#050A3033",
-                                        paddingTop: 15,
-                                        margin: 15,
-                                    }}>
-                                        {interestsArray.map(value => {
+                            {interests.length > 0
+                                ?
+                                <>
+                                    <View style={styles.interestView}>
+                                        {interests.map(value => {
                                             return <TouchableOpacity
                                                 style={
                                                     {
-                                                        backgroundColor: "#000C66cc",
+                                                        backgroundColor: secondary,
                                                         padding: 7,
-                                                        borderColor: "#000C66cc",
+                                                        borderColor: secondary,
                                                         borderWidth: 0.5,
                                                         marginHorizontal: 4.5,
                                                         marginBottom: 12,
                                                         borderRadius: 15,
+                                                        alignSelf: 'center',
+                                                        flexDirection: 'row',
+                                                        justifyContent: 'center',
+                                                    }
+                                                }
+                                                onPress={() => {
+                                                    const index = interests.indexOf(value)
+                                                    interests.includes(value) ? interests.splice(index, 1) : null
+                                                    setInterests([...interests])
+                                                }}
+                                                key={value}
+                                            >
+                                                <Text style={{
+                                                    fontSize: 17,
+                                                    fontFamily: 'Poppins-SemiBold',
+                                                    color: placeholderTextColor
+                                                }}>{value}</Text>
+                                                <Ionicons style={{ paddingHorizontal: 2.5 }} name='close-sharp' color={actionButtonText} size={19} />
+                                            </TouchableOpacity>
+                                        })}
 
+                                    </View>
+                                </>
+                                :
+                                <Text style={styles.nullText}>
+                                    Select your preferences. You can add up to 5 interests
+                                </Text>
+                            }
+                            <ScrollView>
+                                <View style={{
+                                    flexWrap: 'wrap',
+                                    width: '95%',
+                                    alignSelf: 'center',
+                                    flexDirection: 'row',
+                                    justifyContent: 'left',
+                                    borderTopWidth: 1,
+                                    borderTopColor: "#050A3033",
+                                    paddingTop: 15,
+                                    margin: 15,
+                                }}>
+
+                                    {initialInterests.length > 0
+                                        ?
+                                        initialInterests.map(value => {
+                                            return <TouchableOpacity
+                                                style={
+                                                    {
+                                                        backgroundColor: primary,
+                                                        padding: 7,
+                                                        borderColor: primary,
+                                                        borderWidth: 0.5,
+                                                        marginHorizontal: 4.5,
+                                                        marginBottom: 12,
+                                                        borderRadius: 15,
                                                     }
                                                 }
 
@@ -282,35 +254,48 @@ export default function Register() {
                                                     fontFamily: 'Poppins-SemiBold'
                                                 }}>{value}</Text>
                                             </TouchableOpacity>
-                                        })}
-                                    </View>
-                                    <View style={styles.arrows}>
+                                        })
+                                        :
+                                        <></>
+                                    }
 
-                                        <TouchableOpacity style={{
-                                            alignSelf: 'flex-start',
-                                            marginLeft: 25
-                                        }}
-                                            onPress={() => {
-                                                setsendDoB(false)
-                                            }} >
-                                            <Ionicons name='ios-arrow-back-sharp' color={"#000C66cc"} size={28} />
-                                        </TouchableOpacity>
+                                </View>
+                                <View style={styles.arrows}>
 
-                                        <TouchableOpacity style={{
-                                            alignSelf: 'flex-end',
-                                            marginRight: 25,
-                                            backgroundColor: "#000C66cc",
-                                            borderRadius: 10,
-                                        }}>
-                                            <Button color={"lightgrey"} title="Finish" onPress={() => submitRegistration()} />
-                                        </TouchableOpacity>
+                                    <TouchableOpacity style={{
+                                        alignSelf: 'flex-start',
+                                        marginLeft: 25
+                                    }}
+                                        onPress={() => {
+                                            setsendDoB(false)
+                                        }} >
+                                        <Ionicons name='ios-arrow-back-sharp' color={primary} size={28} />
+                                    </TouchableOpacity>
 
-                                    </View>
-                                </ScrollView>
+                                    <TouchableOpacity style={{
+                                        alignSelf: 'flex-end',
+                                        backgroundColor: primary,
+                                        padding: 7,
+                                        borderColor: primary,
+                                        borderWidth: 0.5,
+                                        marginHorizontal: 4.5,
+                                        borderRadius: 15,
+                                        marginRight: 15
+                                    }}
+                                        onPress={() => submitRegistration()}>
+                                        <Text style={{
+                                            fontSize: 18,
+                                            color: '#ebecf5',
+                                            fontFamily: 'Poppins-SemiBold'
+                                        }}>Finish</Text>
+                                    </TouchableOpacity>
 
-                            </>
-                            :
-                            <></>
+                                </View>
+                            </ScrollView>
+
+                        </>
+                        :
+                        <></>
             }
         </View >
     )
@@ -320,13 +305,13 @@ const styles = StyleSheet.create({
     root: {
         height: '100%',
         width: '100%',
-        flex: 1,
-        backgroundColor: '#6495ED'
+        padding: '3%',
+        backgroundColor: backgroundColor
     },
     title: {
         fontSize: 45,
         margin: 10,
-        color: "#050A30",
+        color: primary,
         marginTop: "30%",
         textAlign: 'center',
         fontFamily: 'Poppins-SemiBold'
@@ -335,22 +320,23 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 30,
         textAlign: 'left',
-        alignSelf: 'center',
         width: '95%',
-        marginBottom: -10,
+        marginBottom: '2%',
         fontWeight: '500',
-        color: '#050A30',
+        color: primary,
         fontFamily: 'Poppins-SemiBold'
     },
     input: {
-        margin: 20,
+        width: '100%',
+        marginTop: '3%',
+        marginBottom: '10%',
         borderRadius: 10,
-        borderWidth: 1,
-        padding: 8,
+        borderWidth: 0.7,
+        padding: 15,
         fontSize: 18,
-        borderColor: '#000C66',
-        color: '#050A30',
-        backgroundColor: "#ebecf566",
+        borderColor: placeholderTextColor,
+        color: primary,
+        backgroundColor: inputBackground,
         fontFamily: 'Poppins-Regular'
     },
     arrows: {

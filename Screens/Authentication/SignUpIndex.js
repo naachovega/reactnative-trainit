@@ -2,6 +2,8 @@ import { StyleSheet, View, Text, TextInput, TouchableOpacity, Keyboard } from 'r
 import { useState, useContext } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import AuthContext from '../../Context/index'
+import host from '../../config'
+import { backgroundColor, inputBackground, placeholderTextColor, primary } from '../../Constants/colors'
 
 export default function SignUp({ navigation }) {
 
@@ -39,7 +41,7 @@ export default function SignUp({ navigation }) {
             })
         };
 
-        fetch(`http://192.168.0.87:3000/api/auth/register/`, requestOptions)
+        fetch(`${host}/api/auth/register/`, requestOptions)
             .then(res => res.json())
             .then(data => {
 
@@ -92,7 +94,7 @@ export default function SignUp({ navigation }) {
         </View>
         <TouchableOpacity
             style={{
-                backgroundColor: valid && password !== "" ? "#050a30" : '#050a30aa',
+                backgroundColor: valid && password !== "" ? primary : '#050a30aa',
                 width: '100%',
                 borderRadius: 10,
                 shadowColor: 'grey',
@@ -120,7 +122,7 @@ const style = StyleSheet.create({
         height: '100%',
         width: '100%',
         padding: '5%',
-        backgroundColor: '#6495ED',
+        backgroundColor: backgroundColor
     },
     buttonText: {
         fontSize: 20,
@@ -137,7 +139,7 @@ const style = StyleSheet.create({
     },
     title: {
         fontSize: 56,
-        color: "#050A30",
+        color: primary,
         fontFamily: 'Poppins-SemiBold',
         alignSelf: 'center',
         marginTop: '15%'
@@ -146,7 +148,7 @@ const style = StyleSheet.create({
         fontSize: 36,
         marginTop: '3%',
         marginBottom: '3%',
-        color: '#050A30',
+        color: primary,
         fontFamily: 'Poppins-Bold',
     },
     input: {
@@ -157,9 +159,9 @@ const style = StyleSheet.create({
         borderWidth: 0.7,
         padding: 10,
         fontSize: 18,
-        borderColor: '#000C66cc',
-        color: '#050A30',
-        backgroundColor: "#ebecf566",
+        borderColor: placeholderTextColor,
+        color: primary,
+        backgroundColor: inputBackground,
         fontFamily: 'Poppins-Regular'
     },
     label: {

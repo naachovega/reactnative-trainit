@@ -2,6 +2,7 @@ import { View, Image, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'r
 import { useContext, useEffect } from 'react'
 import AuthContext from '../../../Context/index'
 import GoBack from '../../../Components/GoBack'
+import { backgroundColor, primary } from '../../../Constants/colors'
 
 export default function EditProfile({ navigation }) {
 
@@ -19,7 +20,7 @@ export default function EditProfile({ navigation }) {
     return (
         <SafeAreaView style={styles.root} >
             <Text style={styles.title}>Edit Profile</Text>
-            <View style={{ marginBottom: 20, alignSelf: 'center', borderBottomWidth: .3, width: '95%', paddingBottom: 20 }}>
+            <View style={{ marginBottom: 20, alignSelf: 'center', borderBottomWidth: .3, width: '95%', paddingBottom: 20, borderBottomColor: primary }}>
                 <TouchableOpacity>
                     <Image
                         style={{
@@ -30,6 +31,8 @@ export default function EditProfile({ navigation }) {
                             height: 100,
                             borderRadius: "100%",
                             alignSelf: 'center',
+                            borderColor: primary,
+                            borderWidth: 0.35,
                             opacity: user.picture !== "" ? 1 : 0.8
                         }}
                         source={user.picture !== "" ? { uri: user.picture } : require('../../../assets/default-user-icon.jpg')}
@@ -38,28 +41,44 @@ export default function EditProfile({ navigation }) {
                 </TouchableOpacity>
 
             </View>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'row', marginBottom: 20 }}>
                 <Text style={styles.label}>Bio:</Text>
                 <TouchableOpacity onPress={() => {
                     navigation.navigate("EditBio")
                 }}
                     style={{
                         position: 'absolute',
-                        left: '25%',
+                        left: '35%',
                     }}>
                     <Text style={{
                         fontFamily: 'Poppins-Regular',
-                        color: '#050A30',
+                        color: primary,
                         fontSize: 20,
                         opacity: .4,
-                    }}>Change bio</Text>
+                    }}>Edit bio</Text>
                 </TouchableOpacity>
-                {/* 
-                //TODO 
-                <TouchableOpacity>
-                    <Text>Change profile to coach (//Todo)</Text>
-                </TouchableOpacity> */}
+
             </View>
+
+            <View style={{ flexDirection: 'row' }}>
+                <Text style={styles.label}>Interests:</Text>
+                <TouchableOpacity onPress={() => {
+                    navigation.navigate("Interests")
+                }}
+                    style={{
+                        position: 'absolute',
+                        left: '35%',
+                    }}>
+                    <Text style={{
+                        fontFamily: 'Poppins-Regular',
+                        color: primary,
+                        fontSize: 20,
+                        opacity: .4,
+                    }}>Edit Interests</Text>
+                </TouchableOpacity>
+
+            </View>
+
         </SafeAreaView>
     )
 }
@@ -68,27 +87,26 @@ const styles = StyleSheet.create({
     root: {
         height: '100%',
         width: '100%',
-        backgroundColor: "#6495ED"
+        backgroundColor: backgroundColor
     },
     pictureLabel: {
         fontSize: 20,
         marginLeft: '3%',
-        fontWeight: '500',
-        color: '#050A30',
+        color: primary,
         fontFamily: 'Poppins-SemiBold',
         alignSelf: 'center'
     },
     label: {
         fontSize: 20,
         paddingLeft: '5%',
-        color: '#050A30',
+        color: primary,
         fontFamily: 'Poppins-SemiBold',
     },
     title: {
         fontSize: 40,
-        fontFamily: 'Poppins-SemiBold',
+        fontFamily: 'Poppins-Bold',
         width: '95%',
         alignSelf: 'center',
-        color: '#050A30',
+        color: primary,
     },
 })

@@ -2,6 +2,7 @@ import { SafeAreaView, FlatList, View, Text, TouchableOpacity, Image, StyleSheet
 import { useState, useEffect, useContext } from 'react'
 import UserCard from '../../../Components/UserCard'
 import AuthContext from '../../../Context/index'
+import { backgroundColor } from '../../../Constants/colors'
 
 export default function ClassUsers({ route, navigation }) {
 
@@ -34,6 +35,6 @@ const styles = StyleSheet.create({
     root: {
         height: '100%',
         width: '100%',
-        backgroundColor: '#6495ED'
+        backgroundColor: backgroundColor
     }
 })

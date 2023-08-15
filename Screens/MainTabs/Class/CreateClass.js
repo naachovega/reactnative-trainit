@@ -6,6 +6,7 @@ import SendChanges from '../../../Components/SendChanges';
 import AuthContext from '../../../Context/index'
 import GoBack from '../../../Components/GoBack';
 import { Ionicons } from '@expo/vector-icons';
+import { backgroundColor, inputBackground, primary } from '../../../Constants/colors';
 
 
 export default function CreateClass({ route, navigation }) {
@@ -51,7 +52,7 @@ export default function CreateClass({ route, navigation }) {
             headerTitleStyle: {
                 fontFamily: 'Poppins-SemiBold',
                 fontSize: 25,
-                color: '#050A30'
+                color: {primary}
             },
         })
     }, [newClass, show])
@@ -192,7 +193,7 @@ export default function CreateClass({ route, navigation }) {
                             <Marker
                                 coordinate={locationClass}
                                 draggable={false}
-                                pinColor="#050A30"
+                                pinColor={primary}
                             >
                             </Marker>
                         </MapView>
@@ -241,9 +242,9 @@ export default function CreateClass({ route, navigation }) {
                                 <Text style={{
                                     fontSize: 17,
                                     fontFamily: 'Poppins-SemiBold',
-                                    color: '#000C66cc'
+                                    color: primary
                                 }}>{value}</Text>
-                                <Ionicons style={{ paddingHorizontal: 2.5 }} name='close-sharp' color={'black'} size={19} />
+                                <Ionicons style={{ paddingHorizontal: 2.5 }} name='close-sharp' color={primary} size={19} />
                             </TouchableOpacity>
                         })}
 
@@ -254,9 +255,9 @@ export default function CreateClass({ route, navigation }) {
                             return <TouchableOpacity
                                 style={
                                     {
-                                        backgroundColor: !interests.includes(value) ? "#000C66cc" : 'grey',
+                                        backgroundColor: !interests.includes(value) ? primary : 'grey',
                                         padding: 7,
-                                        borderColor: "#000C66cc",
+                                        borderColor: primary,
                                         borderWidth: 0.5,
                                         marginHorizontal: 4.5,
                                         marginBottom: 12,
@@ -285,19 +286,19 @@ const styles = StyleSheet.create({
     root: {
         width: '100%',
         height: '100%',
-        backgroundColor: '#6495ED'
+        backgroundColor: backgroundColor
     },
     title: {
         fontSize: 40,
         fontFamily: 'Poppins-SemiBold',
         width: '95%',
         alignSelf: 'center',
-        color: '#050A30',
+        color: primary,
     },
     label: {
         fontSize: 20,
         paddingLeft: '3%',
-        color: '#050A30',
+        color: primary,
         fontFamily: 'Poppins-SemiBold',
     },
     input: {
@@ -308,8 +309,8 @@ const styles = StyleSheet.create({
         padding: 8,
         fontSize: 18,
         borderColor: '#000C66',
-        color: '#050A30',
-        backgroundColor: "#ebecf566",
+        color: primary,
+        backgroundColor: inputBackground,
         fontFamily: 'Poppins-Regular'
     },
     fullInterestView: {

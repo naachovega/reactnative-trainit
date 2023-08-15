@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import {TouchableOpacity} from 'react-native'
+import { iconColor, primary, secondary } from '../Constants/colors'
 
 
 
@@ -12,10 +13,10 @@ export default function GoBack() {
         <TouchableOpacity onPress={() => {
             navigation.goBack()
         }}>
-            <Ionicons name='ios-arrow-back-sharp' color={'#050A30'} size={28}
+            <Ionicons name='ios-arrow-back-sharp' color={secondary} size={28}
                 style={{
-                    marginLeft: '3%',
-                    marginTop: '-6%'
+                    marginLeft: '4%',
+                    marginTop: '0%'
                 }} />
         </TouchableOpacity>
 

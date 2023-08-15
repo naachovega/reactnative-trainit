@@ -4,7 +4,7 @@ import AuthContext from '../../../Context/index'
 import MapView, { Marker } from 'react-native-maps'
 import UserCard from '../../../Components/UserCard'
 import { Ionicons } from '@expo/vector-icons'
-
+import { backgroundColor, primary, secondary } from '../../../Constants/colors'
 export default function ClassDetail({ route, navigation }) {
 
     const { trainingClass } = route.params
@@ -150,7 +150,7 @@ export default function ClassDetail({ route, navigation }) {
                         >
                             <Marker
                                 coordinate={currentClass.location}
-                                pinColor="#050A30"
+                                pinColor={primary}
                             />
                         </MapView>
                     </View>
@@ -251,27 +251,27 @@ const styles = StyleSheet.create({
     root: {
         height: '100%',
         width: '100%',
-        backgroundColor: '#6495ED'
+        backgroundColor: backgroundColor
     },
     title: {
         fontSize: 40,
         fontFamily: 'Poppins-SemiBold',
         width: '95%',
         alignSelf: 'center',
-        color: '#050A30',
+        color: primary,
 
     },
     card: {
         marginTop: '5%',
         width: '95%',
         alignSelf: 'center',
-        backgroundColor: '#d3dbe6cc',
+        backgroundColor: secondary,
         borderTopStartRadius: 15,
         borderTopEndRadius: 15,
         height: '50%'
     },
     text: {
-        color: '#000C66cc',
+        color: primary,
         fontFamily: 'Poppins-Regular',
         padding: '3%',
         fontSize: 20,

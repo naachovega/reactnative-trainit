@@ -1,8 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import AuthContex, { initialUser } from './Context/index';
+import AuthContex, { initialUser, initialLocation } from './Context/index';
 import AsyncStorage from './Storage/index.js'
-import Login from './Screens/Authentication/LoginIndex';
 import HomeNavigation from './Screens/Navigation';
 import { useEffect } from 'react';
 import { useCallback } from 'react';
@@ -15,7 +14,7 @@ export default function App() {
 
   const [user, setUser] = useState(initialUser)
   const [theme, setTheme] = useState(useColorScheme())
-
+  const [location, setLocation] = useState(initialLocation)
 
   useEffect(useCallback(() => {
     AsyncStorage.getData('user')
@@ -55,8 +54,8 @@ export default function App() {
 
 
   return (
-    <AuthContex.Provider value={{ user, setUser, theme, setTheme }}>
-      <StatusBar style="auto" />
+    <AuthContex.Provider value={{ user, setUser, theme, setTheme, location, setLocation }}>
+      <StatusBar style="dark" />
       {!user ?
         <LoginNavigation />
         :

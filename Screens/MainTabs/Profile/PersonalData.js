@@ -1,7 +1,9 @@
-import { SafeAreaView, View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, Modal } from 'react-native'
-import { useContext, useState, useEffect, useCallback } from 'react'
+import { SafeAreaView, View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, RefreshControl } from 'react-native'
+import { useContext, useState, useEffect } from 'react'
 import AuthContext from '../../../Context/index'
 import ErrorPopUp from '../../../Components/ErrorPopUp';
+import host from '../../../config';
+import { backgroundColor, primary, secondary, actionButton, actionButtonText } from '../../../Constants/colors';
 
 export default function PersonalData({ route, navigation }) {
 
@@ -21,8 +23,10 @@ export default function PersonalData({ route, navigation }) {
 
     const [open, setOpen] = useState(false)
 
+    const [refreshing, setRefreshing] = useState(false)
+
     useEffect(() => {
-        fetch(`http://192.168.0.87:3000/api/user/information/${_id}`)
+        fetch(`${host}/api/user/information/${_id}`)
             .then(res => res.ok ? res.json() : null)
             .then(data => {
                 if (data) {
@@ -48,108 +52,142 @@ export default function PersonalData({ route, navigation }) {
             })
     }, [user])
 
+    const onRefresh = () => {
+        setOpen(false)
+
+        setRefreshing(true)
+        setTimeout(() => {
+            fetch(`${host}/api/user/information/${_id}`)
+                .then(res => res.status === 200 ? res.json() : null)
+                .then(data => {
+                    if (data) {
+                        setLoggedUser(data)
+                        setRefreshing(false)
+                    } else {
+                        throw Error("There was a problem loading the user info")
+                    }
+                })
+                .catch(err => {
+                    setErrMsg("There was a problem loading the user info. Please try again later")
+                    setRefreshing(false)
+                    setOpen(true)
+                    console.log(err);
+                })
+        }, 300)
+    }
+
     return (
         <SafeAreaView style={styles.root}>
-            <Text style={styles.title}>Personal data</Text>
-            {loggedUser &&
-                <View>
-                    <View style={styles.datosBox}>
-                        <View style={{
-                            paddingLeft: '3%',
-                            flexDirection: 'row',
-                            width: '100%',
-                            marginBottom: '5%',
-                            marginTop: '5%'
-                        }}>
-                            <Image style={{
-                                width: 100,
-                                height: 100,
-                                borderRadius: "100%",
-                                opacity: user.picture !== "" ? 1 : 0.8
-                            }}
-                                source={user.picture !== "" ? { uri: user.picture } : require('../../../assets/default-user-icon.jpg')}
-                            />
+            <ScrollView
+                scrollEnabled={true}
+                refreshControl={<RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                />}
+            >
+                <Text style={styles.title}>Personal data</Text>
+                {loggedUser &&
+                    <View>
+                        <View style={styles.datosBox}>
                             <View style={{
-                                position: 'absolute',
-                                right: '5%',
-                                top: '10%',
-                                justifyContent: 'flex-start',
+                                paddingLeft: '3%',
+                                flexDirection: 'row',
+                                width: '100%',
+                                marginBottom: '5%',
+                                marginTop: '5%'
                             }}>
-                                {user._id === user._id ?
-                                    <TouchableOpacity style={{
-                                        backgroundColor: '#d3dbe6',
-                                        padding: 10,
-                                        borderRadius: 15
-                                    }}
-                                        onPress={() => {
-                                            navigation.navigate("EditProfile")
+                                <Image style={{
+                                    width: 100,
+                                    height: 100,
+                                    borderRadius: "100%",
+                                    borderColor: primary,
+                                    borderWidth: 0.35,
+                                    opacity: user.picture !== "" ? 1 : 0.8
+                                }}
+                                    source={user.picture !== "" ? { uri: user.picture } : require('../../../assets/default-user-icon.jpg')}
+                                />
+                                <View style={{
+                                    position: 'absolute',
+                                    right: '5%',
+                                    top: '10%',
+                                    justifyContent: 'flex-start',
+                                }}>
+                                    {user._id === user._id ?
+                                        <TouchableOpacity style={{
+                                            backgroundColor: actionButton,
+                                            padding: 10,
+                                            borderRadius: 15
                                         }}
-                                    >
-                                        <Text style={{ fontFamily: 'Poppins-SemiBold', fontSize: 18, color: '#1929e0cc' }}>Edit profile</Text>
-                                    </TouchableOpacity>
+                                            onPress={() => {
+                                                navigation.navigate("EditProfile")
+                                            }}
+                                        >
+                                            <Text style={{ fontFamily: 'Poppins-SemiBold', fontSize: 16, color: primary }}>Edit profile</Text>
+                                        </TouchableOpacity>
+                                        :
+                                        <></>
+                                    }
+                                </View>
+                            </View>
+                            <View style={{ paddingLeft: '3%' }}>
+                                <Text style={loggedUser.bio !== "" ? styles.bio : { position: 'absolute' }}>{loggedUser.bio}</Text>
+                                {loggedUser.interests.length > 0
+                                    ?
+                                    <>
+                                        <Text style={styles.arrayLabel}>My Interests:</Text>
+                                        <View style={styles.interestView}>
+                                            {loggedUser.interests.map((value) => {
+                                                return <TouchableOpacity disabled={true}
+                                                    style={{
+                                                        backgroundColor: actionButton,
+                                                        padding: 10,
+                                                        borderColor: actionButton,
+                                                        borderWidth: 0.5,
+                                                        marginRight: 8,
+                                                        marginBottom: 12,
+                                                        borderRadius: 15,
+                                                        alignSelf: 'center',
+                                                        flexDirection: 'row',
+                                                        justifyContent: 'center',
+                                                    }}
+                                                    key={value}>
+                                                    <Text style={{
+                                                        fontSize: 16,
+                                                        fontFamily: 'Poppins-SemiBold',
+                                                        color: primary
+                                                    }}>{value}</Text>
+                                                </TouchableOpacity>
+                                            })}
+                                        </View>
+                                    </>
                                     :
                                     <></>
                                 }
                             </View>
-                        </View>
-                        <View style={{ paddingLeft: '3%' }}>
-                            <Text style={styles.bio}>{loggedUser.bio}</Text>
-                            {loggedUser.interests.length > 0
-                                ?
-                                <>
-                                    <Text style={styles.arrayLabel}>My Interests:</Text>
-                                    <View style={styles.interestView}>
-                                        {loggedUser.interests.map((value) => {
-                                            return <TouchableOpacity disabled={true}
-                                                style={{
-                                                    backgroundColor: "#ebecf5cc",
-                                                    padding: 10,
-                                                    borderColor: "#ebecf5cc",
-                                                    borderWidth: 0.5,
-                                                    marginRight: 8,
-                                                    marginBottom: 12,
-                                                    borderRadius: 15,
-                                                    alignSelf: 'center',
-                                                    flexDirection: 'row',
-                                                    justifyContent: 'center',
-                                                }}
-                                                key={value}>
-                                                <Text style={{
-                                                    fontSize: 17,
-                                                    fontFamily: 'Poppins-SemiBold',
-                                                    color: '#000C66cc'
-                                                }}>{value}</Text>
-                                            </TouchableOpacity>
-                                        })}
-                                    </View>
-                                </>
-                                :
-                                <></>
-                            }
-                        </View>
-                        <View style={styles.infoBox}>
-                            <View style={styles.detailView}>
-                                <Text style={styles.label}>First Name:</Text>
-                                <Text style={styles.textBox}>{loggedUser.name}</Text>
+                            <View style={styles.infoBox}>
+                                <View style={styles.detailView}>
+                                    <Text style={styles.label}>First Name:</Text>
+                                    <Text style={styles.textBox}>{loggedUser.name}</Text>
+                                </View>
+                                <View style={styles.detailView}>
+                                    <Text style={styles.label}>Last Name:</Text>
+                                    <Text style={styles.textBox}>{loggedUser.lastName}</Text>
+                                </View>
+                                <View style={styles.detailView}>
+                                    <Text style={styles.label}>Birthdate:</Text>
+                                    <Text style={styles.textBox}> {!birthdate ? "Loading..." : `${day} / ${month} / ${year}`}</Text>
+                                </View>
+                                <View style={styles.detailView}>
+                                    <Text style={styles.label}>Email:</Text>
+                                    <Text style={styles.textBox}>{loggedUser.email}</Text>
+                                </View>
                             </View>
-                            <View style={styles.detailView}>
-                                <Text style={styles.label}>Last Name:</Text>
-                                <Text style={styles.textBox}>{loggedUser.lastName}</Text>
-                            </View>
-                            <View style={styles.detailView}>
-                                <Text style={styles.label}>Birthdate:</Text>
-                                <Text style={styles.textBox}> {!birthdate ? "Loading..." : `${day} / ${month} / ${year}`}</Text>
-                            </View>
-                            <View style={styles.detailView}>
-                                <Text style={styles.label}>Email:</Text>
-                                <Text style={styles.textBox}>{loggedUser.email}</Text>
-                            </View>
-                        </View>
-                    </View >
-                </View>
-            }
-            {open && <ErrorPopUp open={open} message={errMsg} />}
+                        </View >
+                    </View>
+                }
 
+            </ScrollView>
+            {open && <ErrorPopUp open={open} message={errMsg} />}
         </SafeAreaView >
     )
 }
@@ -158,7 +196,7 @@ const styles = StyleSheet.create({
     root: {
         height: '100%',
         width: '100%',
-        backgroundColor: '#6495ED',
+        backgroundColor: backgroundColor
     },
     datosBox: {
         width: '100%',
@@ -169,7 +207,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-Regular',
         position: 'absolute',
         left: '33%',
-        color: '#050A30',
+        color: primary,
         fontSize: 20,
         padding: 10,
     },
@@ -177,7 +215,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-Regular',
         position: 'absolute',
         left: '33%',
-        color: '#050A30',
+        color: primary,
         fontSize: 20,
         padding: 10,
         opacity: 0.4
@@ -190,15 +228,15 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 40,
-        fontFamily: 'Poppins-SemiBold',
+        fontFamily: 'Poppins-Bold',
         width: '95%',
         alignSelf: 'center',
-        color: '#050A30',
+        color: primary,
     },
     label: {
         fontSize: 20,
         padding: 10,
-        color: '#050A30',
+        color: primary,
         fontFamily: 'Poppins-SemiBold',
     },
     bio: {
@@ -208,7 +246,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         width: '95%',
         marginBottom: '5%',
-        color: '#050A30',
+        color: primary,
 
     },
     arrayText: {
@@ -220,7 +258,7 @@ const styles = StyleSheet.create({
     },
     arrayLabel: {
         fontFamily: 'Poppins-SemiBoldItalic',
-        fontSize: 18,
+        fontSize: 24,
         marginBottom: '2%'
     },
     interestView: {

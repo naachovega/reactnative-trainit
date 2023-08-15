@@ -10,21 +10,25 @@ import EditProfile from "./EditProfile"
 import UserClasses from "../Class/UserClasses"
 import GoBack from "../../../Components/GoBack"
 import ClassDetail from "../Class/ClassDetail"
-
-
+import { Ionicons } from "@expo/vector-icons"
+import { useContext } from 'react'
+import AuthContext from '../../../Context/index'
+import { backgroundColor, primary } from "../../../Constants/colors"
 
 export default function StackProfile() {
+
+    const { user } = useContext(AuthContext)
 
     const Stack = createStackNavigator()
 
     const navigation = useNavigation()
     return (
-        <Stack.Navigator initialRouteName="Profile">
+        <Stack.Navigator initialRouteName="PersonalData">
             <Stack.Group screenOptions={{
                 headerTransparent: false,
                 headerTitle: '',
                 headerStyle: {
-                    backgroundColor: '#6495ED',
+                    backgroundColor: backgroundColor,
                     elevation: 0,
                     shadowOpacity: 0,
                     borderBottomWidth: 0,
@@ -50,10 +54,16 @@ export default function StackProfile() {
                     name="PersonalData"
                     component={PersonalData}
                     options={{
-                        headerLeft: () => {
-                            return <GoBack />
-                        },
+                        headerRight: () => {
+                            return <TouchableOpacity onPress={() => navigation.navigate("Configuration")}>
+                                <Ionicons name="settings-sharp" size={26} color={primary} style={{
+                                    marginRight: '6%',
+                                    marginTop: '-6%'
+                                }} />
+                            </TouchableOpacity>
+                        }
                     }}
+                    initialParams={{ _id: user._id }}
                 />
                 <Stack.Screen
                     name="Configuration"
@@ -82,24 +92,6 @@ export default function StackProfile() {
                         },
                     }}
                 />
-                <Stack.Screen
-                    name="UserClasses"
-                    component={UserClasses}
-                    options={{
-                        headerLeft: () => {
-                            return <GoBack />
-                        },
-                    }}
-                />
-                <Stack.Screen
-                    name="ClassDetail"
-                    component={ClassDetail}
-                    options={{
-                        headerMode: 'screen',
-                        headerLeft: () => {
-                            return <GoBack />
-                        }
-                    }} />
             </Stack.Group>
 
         </Stack.Navigator>

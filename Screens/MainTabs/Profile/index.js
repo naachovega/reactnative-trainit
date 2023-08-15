@@ -3,6 +3,7 @@ import { useContext } from 'react'
 import AuthContext from '../../../Context/index'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
+import { backgroundColor, placeholderTextColor, primary, secondary } from '../../../Constants/colors'
 
 
 export default function Profile() {
@@ -52,7 +53,7 @@ export default function Profile() {
                         <Ionicons
                             name='ios-arrow-forward-sharp'
                             size={24}
-                            color='#000C66cc'
+                            color={placeholderTextColor}
                             style={{
                                 alignSelf: 'flex-end'
                             }} />
@@ -75,7 +76,7 @@ export default function Profile() {
                         <Ionicons
                             name='ios-arrow-forward-sharp'
                             size={24}
-                            color='#000C66cc'
+                            color={placeholderTextColor}
                             style={{
                                 alignSelf: 'flex-end'
                             }} />
@@ -98,37 +99,10 @@ export default function Profile() {
                         <Ionicons
                             name='ios-arrow-forward-sharp'
                             size={24}
-                            color='#000C66cc'
+                            color={placeholderTextColor}
                             style={{
                                 alignSelf: 'flex-end'
                             }} />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => setUser(null)}
-                        style={{
-                            flexDirection: 'row',
-                            marginLeft: '3%',
-                            marginRight: '3%',
-                            paddingTop: 15,
-                            borderTopWidth: 1,
-                            borderTopColor: "#050A3033",
-                            width: '100%',
-                            bottom: '54%',
-                            position: 'absolute'
-                        }}>
-                        <Ionicons
-                            name='log-out-outline'
-                            size={26} color='#ff0000cc'
-                            style={{
-                                paddingRight: 10,
-                            }}
-                        />
-                        <Text style={{
-                            color: '#ff0000cc',
-                            fontSize: 21,
-                            fontFamily: 'Poppins-SemiBold'
-                        }}>Sign out</Text>
-
                     </TouchableOpacity>
                 </View>
             </View>
@@ -140,7 +114,7 @@ const styles = StyleSheet.create({
     root: {
         height: '100%',
         width: '100%',
-        backgroundColor: '#6495ED',
+        backgroundColor: backgroundColor,
     },
     img: {
         paddingTop: 30,
@@ -160,18 +134,18 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         fontSize: 38,
         textAlign: 'center',
-        color: '#050A30',
+        color: primary,
         fontFamily: 'Poppins-SemiBold'
     },
     email: {
         opacity: 0.5,
         fontSize: 16,
-        color: "#050A30",
+        color: primary,
         fontFamily: 'Poppins-SemiBold'
     },
     infoBox: {
-        marginTop: '20%',
-        backgroundColor: '#d3dbe6cc',
+        marginTop: '30%',
+        backgroundColor: secondary,
         width: '100%',
         height: '100%',
         borderTopLeftRadius: 30,
@@ -180,12 +154,12 @@ const styles = StyleSheet.create({
         shadowColor: '#171717',
         shadowOpacity: 0.2,
         shadowRadius: 3,
-        padding: 10
+        padding: 10,
     },
     textBox: {
         alignSelf: 'flex-start',
         fontSize: 21.5,
         fontFamily: 'Poppins-BoldItalic',
-        color: '#050a30',
+        color: primary,
     },
 })

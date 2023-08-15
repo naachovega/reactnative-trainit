@@ -7,8 +7,12 @@ import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import ErrorPopUp from '../../Components/ErrorPopUp';
+import host from '../../config';
+import { actionButton, backgroundColor, inputBackground, logInButton, placeholderTextColor, primary } from '../../Constants/colors';
 
 export default function Login() {
+
+
 
     const { setUser } = useContext(AuthContext)
     const [errMsg, setErrMsg] = useState("test")
@@ -25,7 +29,6 @@ export default function Login() {
     useEffect(() => {
         if (response?.type === 'success') {
             const { authentication } = response
-
             const obj = { accessToken: authentication.accessToken }
 
             const requestOptions = {
@@ -34,17 +37,18 @@ export default function Login() {
                 body: JSON.stringify(obj)
             };
 
-            fetch(`http://192.168.0.87:3000/api/auth/login/google/`, requestOptions)
-                .then(res => res.ok ? res.json() : null)
+            fetch(`${host}/api/auth/login/google/`, requestOptions)
+                .then(res => res.json())
                 .then(data => {
-                    if (data) {
+                    if (data.code === 500) {
+                        throw new Error("No se pudo iniciar la sesion con google, intente nuevamente")
+                    } else {
                         setShowErr(false)
                         setUser(data)
-                    } else {
-                        throw new Error("No se pudo iniciar la sesion con google, intente nuevamente")
                     }
                 })
                 .catch(err => {
+                    console.log(err);
                     setErrMsg(err.message)
                     setShowErr(true)
                 })
@@ -64,10 +68,10 @@ export default function Login() {
             })
         }
 
-        fetch(`http://192.168.0.87:3000/api/auth/signIn`, requestOptions)
+        fetch(`${host}/api/auth/signIn`, requestOptions)
             .then(res => res.json())
             .then(data => {
-                
+
                 if (data.code === 204 || data.code === 401) {
                     throw new Error(data.message)
                 } else if (data.code === 200) {
@@ -116,9 +120,9 @@ export default function Login() {
                     borderWidth: showErr && email !== "" ? 1 : 0.7,
                     padding: 10,
                     fontSize: 18,
-                    borderColor: showErr && email !== "" ? 'red' : '#000C66cc',
-                    color: '#050A30',
-                    backgroundColor: "#ebecf566",
+                    borderColor: showErr && email !== "" ? 'red' : placeholderTextColor,
+                    color: primary,
+                    backgroundColor: inputBackground,
                     fontFamily: 'Poppins-Regular'
                 }}
                 placeholder={"your_email@hotmail.com"}
@@ -138,7 +142,7 @@ export default function Login() {
                 <Ionicons
                     name={seePassword ? 'eye-sharp' : 'eye-off-sharp'}
                     size={25}
-                    color={'050a30'}
+                    color={primary}
                     onPress={() => setSeePassword(!seePassword)}
                     style={{
                         position: 'absolute',
@@ -148,10 +152,9 @@ export default function Login() {
             </View>
             <TouchableOpacity
                 style={{
-                    backgroundColor: valid && password !== "" ? "#050a30" : '#050a30aa',
+                    backgroundColor: valid && password !== "" ? logInButton : actionButton,
                     width: '100%',
                     borderRadius: 10,
-                    shadowColor: 'grey',
                     padding: '1%',
                     marginBottom: '5%',
                     marginTop: '5%'
@@ -160,21 +163,9 @@ export default function Login() {
                 disabled={valid && password !== "" ? false : true}>
                 <Text style={style.buttonText}>Sign In</Text>
             </TouchableOpacity>
-            {/* <Text style={style.googleLogin}>Or use one of your social profiles</Text> */}
             <TouchableOpacity
                 style={style.buttonGoogle}
                 onPress={() => promptAsync()}>
-                {/* 
-                aca va a ir el loguito de google para el boton del SSO
-                <Image
-                source={require('../../assets/adaptive-icon.png')}
-                style={{
-                    top: '-60%',
-                    width: 50,
-                    height: 100,
-                    position: 'absolute'
-                }}
-            /> */}
                 <Text style={style.buttonTextGoogle}>Sign In With Google</Text>
             </TouchableOpacity>
             <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -196,7 +187,7 @@ const style = StyleSheet.create({
         height: '100%',
         width: '100%',
         padding: '5%',
-        backgroundColor: '#6495ED',
+        backgroundColor: backgroundColor,
     },
     buttonGoogle: {
         backgroundColor: "#fff",
@@ -206,7 +197,7 @@ const style = StyleSheet.create({
         padding: '1%',
         marginBottom: '10%',
         marginTop: '5%',
-        color: '#050a30'
+        color: primary
     },
     buttonText: {
         fontSize: 20,
@@ -217,15 +208,15 @@ const style = StyleSheet.create({
     },
     buttonTextGoogle: {
         fontSize: 20,
-        color: '#050a30',
+        color: actionButton,
         textAlign: 'center',
         marginVertical: 6,
         fontFamily: 'Poppins-SemiBold'
     },
     title: {
         fontSize: 56,
-        color: "#050A30",
-        fontFamily: 'Poppins-SemiBold',
+        color: primary,
+        fontFamily: 'Poppins-ExtraBold',
         alignSelf: 'center',
         marginTop: '40%'
     },
@@ -233,14 +224,15 @@ const style = StyleSheet.create({
         fontSize: 36,
         marginTop: '3%',
         marginBottom: '3%',
-        color: '#050A30',
+        color: primary,
         fontFamily: 'Poppins-Bold',
     },
     googleLogin: {
         fontSize: 18,
         fontFamily: 'Poppins-SemiBold',
         margin: '2%',
-        alignSelf: 'center'
+        alignSelf: 'center',
+        color: actionButton
     },
     label: {
         fontSize: 26,
@@ -262,9 +254,9 @@ const style = StyleSheet.create({
         borderWidth: 0.7,
         padding: 10,
         fontSize: 18,
-        borderColor: '#000C66cc',
-        color: '#050A30',
-        backgroundColor: "#ebecf566",
+        borderColor: placeholderTextColor,
+        color: primary,
+        backgroundColor: inputBackground,
         fontFamily: 'Poppins-Regular'
     },
     errMsg: {

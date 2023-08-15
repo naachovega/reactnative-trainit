@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { NativeModules, LayoutAnimation, Text, TouchableOpacity, StyleSheet, View } from 'react-native';
+import { primary } from '../Constants/colors';
 
 const { UIManager } = NativeModules;
 
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'red',
     },
     button: {
-        backgroundColor: 'black',
+        backgroundColor: primary,
         paddingHorizontal: 20,
         paddingVertical: 15,
         marginTop: 15,

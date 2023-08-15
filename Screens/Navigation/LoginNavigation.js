@@ -6,6 +6,7 @@ import Login from "../Authentication/LoginIndex";
 import SignUp from "../Authentication/SignUpIndex";
 import { TouchableOpacity } from 'react-native'
 import { Ionicons } from "@expo/vector-icons";
+import { backgroundColor } from "../../Constants/colors";
 
 export default function LoginNavigation() {
 
@@ -24,7 +25,7 @@ export default function LoginNavigation() {
                 headerShown: true,
                 headerTitle: '',
                 headerStyle: {
-                    backgroundColor: "#6495ED",
+                    backgroundColor: backgroundColor,
                 },
                 headerShadowVisible: false, 
                 headerBackTitleVisible: false,
