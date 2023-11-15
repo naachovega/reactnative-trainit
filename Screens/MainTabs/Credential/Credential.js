@@ -5,7 +5,7 @@ import AuthContext from '../../../Context/index'
 import { Ionicons } from '@expo/vector-icons';
 import ErrorPopUp from '../../../Components/ErrorPopUp';
 import host from '../../../config';
-import { actionButton, actionButtonText, backgroundColor, primary, secondary } from '../../../Constants/colors';
+import { actionButton, actionButtonText, backgroundColor, credentialText, primary, secondary } from '../../../Constants/colors';
 
 export default function CredentialTrainIt({ navigation }) {
 
@@ -77,8 +77,8 @@ export default function CredentialTrainIt({ navigation }) {
             alignSelf: 'center',
         }}>
 
-            <Text style={{ color: actionButtonText, fontSize: 24, fontFamily: 'Poppins-Regular', marginBottom: 25 }}>{`${user.name} ${user.lastName}`}</Text>
-            <Text style={{ color: actionButtonText, fontSize: 24, fontFamily: 'Poppins-SemiBold' }}>{user.credential}</Text>
+            <Text style={{ color: credentialText, fontSize: 24, fontFamily: 'Poppins-Regular', marginBottom: 25 }}>{`${user.name} ${user.lastName}`}</Text>
+            <Text style={{ color: credentialText, fontSize: 24, fontFamily: 'Poppins-SemiBold' }}>{user.credential}</Text>
         </View>
         <Text style={styles.title}>Scan Here</Text>
         <TouchableOpacity

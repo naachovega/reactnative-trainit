@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons'
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView, TextInput } from 'react-native'
-import { backgroundColor, inputBackground, placeholderTextColor, primary } from '../../Constants/colors'
+import { backgroundColor, inputBackground, placeholderTextColor, primary, secondary } from '../../Constants/colors'
 import { useState } from 'react'
 
 export default function CreateRoutine({ navigation, route }) {
@@ -23,7 +23,7 @@ export default function CreateRoutine({ navigation, route }) {
                 reps: reps,
             }
         }
-        
+
         exercises.push(e)
         setExercises([...exercises])
     }
@@ -33,7 +33,7 @@ export default function CreateRoutine({ navigation, route }) {
         <Text style={style.label}>What are you traning today?</Text>
         <TextInput
             placeholder={'Your routine title'}
-            placeholderTextColor={"#505254"}
+            placeholderTextColor={placeholderTextColor}
             value={name}
             onChangeText={setName}
             style={style.input}
@@ -127,7 +127,7 @@ const style = StyleSheet.create({
         fontSize: 18,
         borderColor: placeholderTextColor,
         color: primary,
-        backgroundColor: inputBackground,
+        backgroundColor: secondary,
         fontFamily: 'Poppins-Regular'
     },
 })

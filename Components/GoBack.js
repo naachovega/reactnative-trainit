@@ -13,7 +13,7 @@ export default function GoBack() {
         <TouchableOpacity onPress={() => {
             navigation.goBack()
         }}>
-            <Ionicons name='ios-arrow-back-sharp' color={secondary} size={28}
+            <Ionicons name='ios-arrow-back-sharp' color={primary} size={28}
                 style={{
                     marginLeft: '4%',
                     marginTop: '0%'

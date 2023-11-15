@@ -1,6 +1,6 @@
 import { TouchableOpacity, SafeAreaView, View, Text, StyleSheet, Alert } from 'react-native'
 import { Switch } from 'react-native-switch'
-import { useState, useContext } from 'react'
+import { useContext } from 'react'
 import AuthContext from '../../Context/index'
 import host from '../../config'
 import { backgroundColor, placeholderTextColor, primary } from '../../Constants/colors'

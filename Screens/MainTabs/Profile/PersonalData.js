@@ -3,7 +3,7 @@ import { useContext, useState, useEffect } from 'react'
 import AuthContext from '../../../Context/index'
 import ErrorPopUp from '../../../Components/ErrorPopUp';
 import host from '../../../config';
-import { backgroundColor, primary, secondary, actionButton, actionButtonText } from '../../../Constants/colors';
+import { backgroundColor, primary, secondary, actionButton, actionButtonText, textColor } from '../../../Constants/colors';
 
 export default function PersonalData({ route, navigation }) {
 
@@ -32,6 +32,7 @@ export default function PersonalData({ route, navigation }) {
                 if (data) {
                     setTimeout(() => {
                         setLoggedUser(data)
+
                         const date = new Date(data.birthdate)
                         let bdayYear = date.getFullYear()
                         let bdayMonth = date.toLocaleString('default', { month: 'long' })
@@ -154,7 +155,7 @@ export default function PersonalData({ route, navigation }) {
                                                     <Text style={{
                                                         fontSize: 16,
                                                         fontFamily: 'Poppins-SemiBold',
-                                                        color: primary
+                                                        color: textColor
                                                     }}>{value}</Text>
                                                 </TouchableOpacity>
                                             })}
@@ -207,7 +208,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-Regular',
         position: 'absolute',
         left: '33%',
-        color: primary,
+        color: textColor,
         fontSize: 20,
         padding: 10,
     },
@@ -246,7 +247,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         width: '95%',
         marginBottom: '5%',
-        color: primary,
+        color: textColor,
 
     },
     arrayText: {
@@ -259,7 +260,8 @@ const styles = StyleSheet.create({
     arrayLabel: {
         fontFamily: 'Poppins-SemiBoldItalic',
         fontSize: 24,
-        marginBottom: '2%'
+        marginBottom: '2%',
+        color: primary
     },
     interestView: {
         flexWrap: 'wrap',
@@ -274,6 +276,6 @@ const styles = StyleSheet.create({
     errMsg: {
         fontFamily: 'Poppins-Regular',
         fontSize: 15,
-        color: 'white'
+        color: textColor
     }
 })

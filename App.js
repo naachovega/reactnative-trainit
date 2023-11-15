@@ -55,7 +55,7 @@ export default function App() {
 
   return (
     <AuthContex.Provider value={{ user, setUser, theme, setTheme, location, setLocation }}>
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
       {!user ?
         <LoginNavigation />
         :
@@ -63,4 +63,4 @@ export default function App() {
       }
     </AuthContex.Provider>
   )
-} 
+}

@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, TextInput, Keyboard, TouchableOpacity, ScrollView } from 'react-native'
 import { useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
-import DateTimePicker from '@react-native-community/datetimepicker';
+// import DateTimePicker from "@react-native-community/datetimepicker"
 import { useContext } from 'react';
 import AuthContext from '../../Context/index'
 import host from '../../config';
@@ -131,7 +131,7 @@ export default function Register() {
                             display='spinner'
                             style={{ marginTop: 20 }}
                             // maximumDate={new Date(`${year}-${month}-${day}`)}
-                            value={doB}
+                            value={new Date()}
                             onChange={setChange}
                         />
 
